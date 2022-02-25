@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -43,7 +44,7 @@ public class OauthService {
 				.build();
 	}
 
-	public Model saveAuthorizeToken(
+	public void saveAuthorizeToken(
 			Model model, String code, String scope, String client_info, String state
 	) {
 		System.out.println("인가 코드 : " + code);
@@ -82,13 +83,19 @@ public class OauthService {
 			model.addAttribute("tokenDto", dto);
 			saveOauthToken(dto.toEntity());
 		}
-		return model;
 	}
 
 	@Transactional
 	public void saveOauthToken(OauthToken token) {
 		try {
-			oauthTokenRepository.save(token);
+			Optional<OauthToken> userOpt = oauthTokenRepository.findByUser_seq_no(token.getUser_seq_no());
+			if (userOpt.isPresent()) {
+				userOpt.get().setAccess_token(token.getAccess_token());
+				userOpt.get().setRefresh_token(token.getRefresh_token());
+				userOpt.get().setExpires_in(token.getExpires_in());
+			} else {
+				oauthTokenRepository.save(token);
+			}
 		} catch (Exception e) {
 			throw new RuntimeException("저장 실패");
 		}

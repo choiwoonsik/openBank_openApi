@@ -48,7 +48,7 @@ public class OauthApi {
 			@RequestParam(name = "state") String state
 	) {
 		try {
-			model = oauthService.saveAuthorizeToken(model, code, scope, client_info, state);
+			oauthService.saveAuthorizeToken(model, code, scope, client_info, state);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "redirect:/";
