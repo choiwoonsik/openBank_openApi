@@ -1,0 +1,28 @@
+server:
+  port: 9090
+
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+  mvc:
+    view:
+      suffix: .html
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/woonsik
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+      path: /test
+
+oauth:
+  client_id: 901765e4-1f64-448b-9961-ca7e2c1bb9b3
+  client_secret: e8c39c74-8b45-44c8-9542-50f0bf989ed2
+  redirect_uri: http://localhost:9090/oauth/callback.html

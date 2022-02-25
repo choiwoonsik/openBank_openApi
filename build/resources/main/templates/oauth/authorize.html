@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Authorize Code 요청 페이지</title>
+</head>
+<body>
+
+<span onclick="authorizeHref();" style="cursor:pointer">
+    권한 코드 받기
+</span>
+
+<script type="text/javascript">
+    function authorizeHref() {
+        location.href = "https://testapi.openbanking.or.kr/oauth/2.0/authorize?response_type=code&client_id=901765e4-1f64-448b-9961-ca7e2c1bb9b3&redirect_uri=http://localhost:9090/callback.html&scope=login inquiry transfer&client_info=woonsik&state=12345678901234567890123456789012&auth_type=0&lang=kor&cellphone_cert_yn=Y&authorized_cert_yn=N&account_hold_auth_yn=N";
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <title>OPEN BANK API</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <h1>오픈뱅킹 API</h1>
+        <a class="btn btn-lg btn-secondary" href="/">홈</a>
+        <p class="lead">1. 인증</p>
+        <p>
+            <a class="btn btn-lg btn-secondary" href="/oauth/authorizeCode">사용자 인가 코드 발급</a>
+            <br>
+            <a class="btn btn-lg btn-secondary" href="/oauth/token">토큰 발급</a>
+            <br>
+            <a class="btn btn-lg btn-secondary" href="/oauth/authorize_check">사용자 인증 확인</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>

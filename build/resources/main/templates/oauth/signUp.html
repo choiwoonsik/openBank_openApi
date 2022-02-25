@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:replace="fragments/header :: header">
+    <title>엑세스 토큰으로 회원가입</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body class="container">
+<table class="table table-striped">
+    <tr>
+        <th>엑세스 토큰</th>
+        <th>리프레쉬 토큰</th>
+        <th>토큰 타입</th>
+        <th>만료시간</th>
+        <th>권한 범위</th>
+        <th>유저 시퀀스</th>
+    </tr>
+    <tr>
+        <td th:text="${tokenDto.getAccess_token()}"></td>
+        <td th:text="${tokenDto.getRefresh_token()}"></td>
+        <td th:text="${tokenDto.getToken_type()}"></td>
+        <td th:text="${tokenDto.getExpires_in()}"></td>
+        <td th:text="${tokenDto.getScope()}"></td>
+        <td th:text="${tokenDto.getUser_seq_no()}"></td>
+    </tr>
+</table>
+</body>
+</html>
