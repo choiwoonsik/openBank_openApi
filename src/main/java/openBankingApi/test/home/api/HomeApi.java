@@ -14,9 +14,4 @@ public class HomeApi {
 		log.info("home controller");
 		return "home";
 	}
-
-	@GetMapping("/callback")
-	public String callback() {
-		return "callback";
-	}
 }

@@ -3,21 +3,23 @@ package openBankingApi.test.oauth.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import openBankingApi.test.basic.exception.BusinessException;
-import openBankingApi.test.basic.exception.ExMessage;
+import openBankingApi.test.basic.response.ResponseService;
 import openBankingApi.test.oauth.dto.AuthorizeReqDto;
 import openBankingApi.test.oauth.dto.OauthTokenRes;
 import openBankingApi.test.oauth.entity.OauthToken;
 import openBankingApi.test.oauth.repository.OauthTokenRepository;
+import openBankingApi.test.restTemplate.RestTemplateService;
+import openBankingApi.test.user.dto.MemberDto;
+import openBankingApi.test.user.repository.MemberRepository;
+import openBankingApi.test.user.service.MemberService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Map;
@@ -29,6 +31,9 @@ import java.util.Optional;
 public class OauthService {
 
 	private final OauthTokenRepository oauthTokenRepository;
+	private final MemberService memberService;
+	private final MemberRepository memberRepository;
+	private final RestTemplateService rest;
 
 	@Value("${oauth.client_id}")
 	private String client_id;
@@ -52,16 +57,9 @@ public class OauthService {
 	public OauthToken saveAuthorizeToken(
 			String code, String scope, String client_info, String state
 	) {
-		if (!client_info.equals("woonsik") || !state.equals("12345678901234567890123456789012")) {
+		if (!client_info.equals("woonsik01075832933") || !state.equals("12345678901234567890123456789012")) {
 			throw new BusinessException("사전 정보 오류");
 		}
-
-		RestTemplate restTemplate = new RestTemplate();
-		String openUrl = "https://testapi.openbanking.or.kr/oauth/2.0/token";
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("code", code);
@@ -70,11 +68,11 @@ public class OauthService {
 		params.add("redirect_uri", redirect_uri);
 		params.add("grant_type", "authorization_code");
 
-
-		HttpEntity formEntity = new HttpEntity<>(params, headers);
-
-		ResponseEntity<OauthTokenRes> response
-				= restTemplate.postForEntity(openUrl, formEntity, OauthTokenRes.class);
+		ResponseEntity<OauthTokenRes> response = rest
+				.postRestTemplate(
+						"oauth/2.0/token", MediaType.APPLICATION_FORM_URLENCODED,
+						MediaType.APPLICATION_JSON, params, OauthTokenRes.class
+				);
 
 		log.info("인가 코드 : " + code);
 		log.info("응답 코드 : " + response.getStatusCode());
@@ -83,9 +81,17 @@ public class OauthService {
 				&& response.getBody() != null
 				&& response.getBody().getAccess_token() != null)
 		{
-			log.info("res > " + response.getBody());
 			OauthToken oauthToken = response.getBody().toEntity();
+			oauthToken.setUserId(client_info);
 			oauthToken.setRegDate(LocalDateTime.now());
+
+			if (!memberRepository.findByUserSeqNo(oauthToken.getUserSeqNo()).isPresent()) {
+				memberService.saveUser(MemberDto.builder()
+						.userSeqNo(oauthToken.getUserSeqNo())
+						.userId(oauthToken.getUserId())
+						.build());
+			}
+
 			saveOauthToken(oauthToken);
 			return oauthToken;
 		}
