@@ -1,0 +1,4 @@
+oauth:
+  client_id: 901765e4-1f64-448b-9961-ca7e2c1bb9b3
+  client_secret: e8c39c74-8b45-44c8-9542-50f0bf989ed2
+  redirect_uri: http://localhost:9090/oauth/callback.html

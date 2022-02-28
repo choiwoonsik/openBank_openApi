@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class AuthorizeReqDto {
 	String code;
 	String scope;
-	String client_info;
+	String clientInfo;
 	String state;
 }

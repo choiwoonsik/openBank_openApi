@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface OauthTokenRepository extends JpaRepository<OauthToken, Long> {
-	Optional<OauthToken> findByUser_seq_no(Long user_seq_no);
+	Optional<OauthToken> findByUserSeqNo(Long userSeqNo);
 }

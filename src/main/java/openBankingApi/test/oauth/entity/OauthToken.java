@@ -3,6 +3,7 @@ package openBankingApi.test.oauth.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -17,20 +18,23 @@ public class OauthToken {
 	private Long seq;
 
 	@Column(columnDefinition = "TEXT", length = 400)
-	private String access_token;
+	private String accessToken;
 
 	@Column
-	private String token_type;
+	private String tokenType;
 
 	@Column
-	private String expires_in;
+	private String expiresIn;
 
 	@Column(columnDefinition = "TEXT", length = 400)
-	private String refresh_token;
+	private String refreshToken;
 
 	@Column
 	private String scope;
 
 	@Column
-	private Long user_seq_no;
+	private Long userSeqNo;
+
+	@Column
+	private LocalDateTime regDate;
 }

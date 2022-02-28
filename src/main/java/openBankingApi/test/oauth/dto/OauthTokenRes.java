@@ -5,8 +5,8 @@ import openBankingApi.test.oauth.entity.OauthToken;
 
 @Data
 public class OauthTokenRes {
-	String token_type;
 	String access_token;
+	String token_type;
 	String expires_in;
 	String refresh_token;
 	String scope;
@@ -14,12 +14,12 @@ public class OauthTokenRes {
 
 	public OauthToken toEntity() {
 		return OauthToken.builder()
-				.token_type(token_type)
-				.access_token(access_token)
-				.expires_in(expires_in)
-				.refresh_token(refresh_token)
+				.accessToken(access_token)
+				.tokenType(token_type)
+				.expiresIn(expires_in)
+				.refreshToken(refresh_token)
 				.scope(scope)
-				.user_seq_no(user_seq_no)
+				.userSeqNo(user_seq_no)
 				.build();
 	}
 }

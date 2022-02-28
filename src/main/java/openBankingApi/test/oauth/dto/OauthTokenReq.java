@@ -7,8 +7,8 @@ import lombok.ToString;
 @ToString
 public class OauthTokenReq {
 	String code;
-	String client_id;
-	String client_secret;
-	String redirect_uri;
-	String grant_type;
+	String clientId;
+	String clientSecret;
+	String redirectUri;
+	String grantType;
 }
