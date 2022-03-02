@@ -3,7 +3,6 @@ package openBankingApi.test.oauth.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import openBankingApi.test.basic.exception.BusinessException;
-import openBankingApi.test.basic.response.ResponseService;
 import openBankingApi.test.oauth.dto.AuthorizeReqDto;
 import openBankingApi.test.oauth.dto.OauthTokenRes;
 import openBankingApi.test.oauth.entity.OauthToken;
@@ -18,10 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -34,6 +31,9 @@ public class OauthService {
 	private final MemberService memberService;
 	private final MemberRepository memberRepository;
 	private final RestTemplateService rest;
+
+	@Value("${open_api.state}")
+	private String openApiState;
 
 	@Value("${oauth.client_id}")
 	private String client_id;
@@ -57,7 +57,11 @@ public class OauthService {
 	public OauthToken saveAuthorizeToken(
 			String code, String scope, String client_info, String state
 	) {
-		if (!client_info.equals("woonsik01075832933") || !state.equals("12345678901234567890123456789012")) {
+		int index = client_info.lastIndexOf("M");
+		String clientName = client_info.substring(0, index);
+		String clientMobile = client_info.substring(index + 1);
+
+		if (!state.equals(openApiState)) {
 			throw new BusinessException("사전 정보 오류");
 		}
 
@@ -82,13 +86,15 @@ public class OauthService {
 				&& response.getBody().getAccess_token() != null)
 		{
 			OauthToken oauthToken = response.getBody().toEntity();
-			oauthToken.setUserId(client_info);
+			oauthToken.setUserName(clientName);
+			oauthToken.setUserMobile(clientMobile);
 			oauthToken.setRegDate(LocalDateTime.now());
 
 			if (!memberRepository.findByUserSeqNo(oauthToken.getUserSeqNo()).isPresent()) {
 				memberService.saveUser(MemberDto.builder()
 						.userSeqNo(oauthToken.getUserSeqNo())
-						.userId(oauthToken.getUserId())
+						.userName(oauthToken.getUserName())
+						.userMobile(oauthToken.getUserMobile())
 						.build());
 			}
 

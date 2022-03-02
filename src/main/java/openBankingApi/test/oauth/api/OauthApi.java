@@ -8,6 +8,7 @@ import openBankingApi.test.basic.response.ResponseService;
 import openBankingApi.test.basic.response.SingleResult;
 import openBankingApi.test.oauth.entity.OauthToken;
 import openBankingApi.test.oauth.service.OauthService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +21,26 @@ public class OauthApi {
 	private final OauthService oauthService;
 	private final ResponseService responseService;
 
+	@Value("${open_api.state}")
+	String state;
+
 	@GetMapping("/oauth/authorizeCode")
-	public String requestAuthorizeCode() {
-		String url = "https://testapi.openbanking.or.kr/oauth/2.0/authorize?response_type=code&client_id=901765e4-1f64-448b-9961-ca7e2c1bb9b3&redirect_uri=http://localhost:9090/oauth/callback.html&scope=login inquiry transfer&client_info=woonsik01075832933&state=12345678901234567890123456789012&auth_type=0&lang=kor&cellphone_cert_yn=Y&authorized_cert_yn=N&account_hold_auth_yn=N";
+	public String requestAuthorizeCode(
+			@RequestParam String clientName,
+			@RequestParam String clientMobile
+	) {
+		String url = "https://testapi.openbanking.or.kr/oauth/2.0/authorize" +
+				"?response_type=code" +
+				"&client_id=901765e4-1f64-448b-9961-ca7e2c1bb9b3" +
+				"&redirect_uri=http://localhost:9090/oauth/callback.html" +
+				"&scope=login inquiry transfer" +
+				"&client_info=" + clientName+ "M" + clientMobile +
+				"&state=" + state +
+				"&auth_type=0" +
+				"&lang=kor" +
+				"&cellphone_cert_yn=Y" +
+				"&authorized_cert_yn=N" +
+				"&account_hold_auth_yn=N";
 		return "redirect:" + url;
 	}
 

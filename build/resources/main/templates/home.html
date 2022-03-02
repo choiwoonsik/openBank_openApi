@@ -2,19 +2,91 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header">
     <title>OPEN BANK API</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
 <div class="container">
     <div class="jumbotron">
         <h1>오픈뱅킹 API</h1>
         <a class="btn btn-lg btn-secondary" href="/">홈</a>
-        <p class="lead">1. 인증</p>
-        <p>
-            <a class="btn btn-lg btn-secondary" href="/oauth/authorizeCode">사용자 인가 코드 발급 (성공 시 이어서 사용자 토큰 발급 진행)</a>
-            <br>
-            <a class="btn btn-lg btn-secondary" href="/user/me">사용자 정보 & 계좌 정보 조회</a>
-        </p>
+        <h3>1. 인증 _ oauth</h3>
+        <p class="lead">사용자 인가 코드 & 토큰 발급 진행</p>
+        <form action='/oauth/authorizeCode'>
+            회원 이름 : <input id='authorize_client_name' type='text' name="clientName" value="testUser"/><br>
+            회원 전화번호 : <input id='authorize_client_mobile' type='tel' maxlength='11' name="clientMobile"
+                             value="01012341234"/><br>
+            <input type='submit' value='가입'>
+        </form>
+        <!--        <a class="btn btn-lg btn-secondary" href="/oauth/authorizeCode">사용자 인가 코드 발급 (성공 시 이어서 사용자 토큰 발급 진행)</a><br>-->
+        <h3>2. 사용자 _ user</h3>
+        <p class="lead">사용자 정보 조회</p>
+        <form action='/user/me'>
+            회원 이름 : <input id="user_client_name" type="text" name="clientName" value="testUser"/><br>
+            회원 전화번호 : <input id='user_client_mobile' type='tel' maxlength='11' name="clientMobile"
+                             value="01012341234"/><br>
+            <input type='submit' value='사용자 정보 조회'>
+        </form>
+        <!--        <a class="btn btn-lg btn-secondary" href="/user/me">사용자 정보 & 계좌 정보 조회</a>-->
+        <h3>3. 조회 _ account</h3>
+        <p class="lead">잔액 조회</p>
+        <form action='/account/balance/fin_num'>
+            회원 이름 : <input id="account_client_name" type="text" name="clientName"
+                            value="testUser"/><br>
+            회원 전화번호 : <input id='account_client_mobile' type='tel' maxlength='11' name="clientMobile"
+                             value="01012341234"/><br>
+            계좌 핀테크 이용 번호 : <input id="account_fintech_use_num" type="text" name="fintechUseNum"/><br>
+            <input type='submit' value='잔액 조회'>
+        </form>
+
+        <h3>4. 이체 _ transfer</h3>
+        <p class="lead">출금이체 - 핀테크 이용 번호 사용</p>
+        <form class="container" action='transfer/withdraw/fin_num' method="post">
+            <div class="mb-3">
+                <label class="form-label">회원 이름</label>
+                <input class="form-control" id="transfer_client_name" type="text" name="clientName"
+                       value="testUser"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">회원 전화번호</label>
+                <input class="form-control" id="transfer_client_mobile" type="text" name="clientMobile"
+                       value="01012341234"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">입금 계좌</label>
+                <input class="form-control" id="transfer_cntr_account_num" type="text" name="cntr_account_num"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">입금 계좌 기재 사항</label>
+                <input class="form-control" id="transfer_dps_print_content" type="text" name="dps_print_content"
+                       value="아임인 목돈 입금"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">출금 계좌의 핀테크 번호</label>
+                <input class="form-control" id="transfer_fintech_use_num" type="text" name="fintech_use_num"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">출금 계좌 기재사항</label>
+                <input class="form-control" id="transfer_wd_print_content" type="text" name="wd_print_content"
+                       value="아임인 목돈 출금"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">출금액</label>
+                <input class="form-control" id="transfer_tran_amt" type="text" name="tran_amt"/>
+            </div>
+            <!--            <div class="mb-3">-->
+            <!--                <label class="form-label">요청 고객 계좌 개설기관 표준 코드</label>-->
+            <!--                <input class="form-control" id="transfer_req_client_bank_code" type="text" name=""/>-->
+            <!--            </div>-->
+            <!--            <div class="mb-3">-->
+            <!--                <label class="form-label">요청 고객 계좌 번호</label>-->
+            <!--                <input class="form-control" id="transfer_req_client_account_num" type="text" name=""/>-->
+            <!--            </div>-->
+            <div class="mb-3">
+                <label class="form-label">요청 고객 핀테크 이용 번호</label>
+                <input class="form-control" id="transfer_req_client_fintech_use_num" type="text" name="req_client_fintech_use_num"/>
+            </div>
+            <input type='submit' value='출금 이체'>
+        </form>
     </div>
 </div>
 </body>

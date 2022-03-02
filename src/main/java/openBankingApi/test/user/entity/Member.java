@@ -18,14 +18,18 @@ public class Member {
 	private Long seq;
 
 	@Column
-	private String userId;
+	private String userName;
+
+	@Column
+	private String userMobile;
 
 	@Column
 	private Long userSeqNo;
 
 	public MemberDto toDto() {
 		return MemberDto.builder()
-				.userId(userId)
+				.userName(userName)
+				.userMobile(userMobile)
 				.userSeqNo(userSeqNo)
 				.build();
 	}

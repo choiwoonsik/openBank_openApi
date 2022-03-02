@@ -42,8 +42,9 @@ public class MemberService {
 		}
 	}
 
-	public UserInfoAndAccountList getUserInfo(Long userSeqNo) {
-		OauthToken oauthToken = tokenRepository.findByUserSeqNo(userSeqNo)
+	@Transactional(readOnly = true)
+	public UserInfoAndAccountList getUserInfo(String userName, String userMobile) {
+		OauthToken oauthToken = tokenRepository.findByUserNameAndUserMobile(userName, userMobile)
 				.orElseThrow(() -> new BusinessException(ExMessage.UNDEFINED_ERROR));
 
 		HttpHeaders headers = new HttpHeaders();

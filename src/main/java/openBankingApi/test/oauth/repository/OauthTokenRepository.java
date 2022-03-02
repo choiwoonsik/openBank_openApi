@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface OauthTokenRepository extends JpaRepository<OauthToken, Long> {
 	Optional<OauthToken> findByUserSeqNo(Long userSeqNo);
+
+	Optional<OauthToken> findByUserNameAndUserMobile(String userName, String userMobile);
 }

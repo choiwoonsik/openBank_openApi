@@ -10,9 +10,5 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 	Boolean existsByUserSeqNo(Long userSeqNo);
 
-	Boolean existsByUserId(String userId);
-
 	Optional<Member> findByUserSeqNo(Long userSeqNo);
-
-	Optional<Member> findByUserId(String userId);
 }

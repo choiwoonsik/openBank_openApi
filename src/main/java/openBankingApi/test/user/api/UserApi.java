@@ -19,10 +19,11 @@ public class UserApi {
 
 	@GetMapping("/user/me")
 	public SingleResult<UserInfoAndAccountList> getUserInfo(
-			@RequestParam("user_seq_no") Long userSeqNo
+			@RequestParam("clientName") String userName,
+			@RequestParam("clientMobile") String userMobile
 	) {
 		try {
-			return responseService.getSingleResult(memberService.getUserInfo(userSeqNo));
+			return responseService.getSingleResult(memberService.getUserInfo(userName, userMobile));
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BusinessException(e.getMessage());
