@@ -6,7 +6,8 @@ import openBankingApi.test.basic.exception.BusinessException;
 import openBankingApi.test.basic.exception.ExMessage;
 import openBankingApi.test.oauth.entity.OauthToken;
 import openBankingApi.test.oauth.repository.OauthTokenRepository;
-import openBankingApi.test.transfer.dto.TransferWithdrawFinNumReq;
+import openBankingApi.test.transfer.dto.TransferWdFinNumReq;
+import openBankingApi.test.transfer.dto.TransferWdFinNumRes;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -25,34 +26,57 @@ public class TransferService {
 	@Value("${open_api.agency_code}")
 	private String agencyCode;
 
-	public void transferWithdrawByFinNum(TransferWithdrawFinNumReq req) {
-		String clientName = req.getClientName();
+	public TransferWdFinNumRes transferWithdrawByFinNum(TransferWdFinNumReq req) {
+		String clientId = req.getClientId();
 		String clientMobile = req.getClientMobile();
 
-		OauthToken oauthToken = tokenRepository.findByUserNameAndUserMobile(clientName, clientMobile)
+		OauthToken oauthToken = tokenRepository.findByUserNameAndUserMobile(clientId, clientMobile)
 				.orElseThrow(() -> new BusinessException(ExMessage.NOT_FOUND_ERROR));
 
 		String accessToken = oauthToken.getAccessToken();
-		String randNum = String.valueOf(new Random(System.currentTimeMillis()).nextInt(1000000000));
+		String randNum = String.valueOf(new Random(System.currentTimeMillis()).nextInt(1000000000 - 100000001) + 100000000);
 		String bankTranId = agencyCode + "U" + randNum;
 
 		DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA);
+		DateFormat clientDf = new SimpleDateFormat("ddHHmmss", Locale.KOREA);
 		String tranDtime = df.format(new Date());
 
 		req.setBank_tran_id(bankTranId);
 		req.setCntr_account_type("N");
 		req.setTran_dtime(tranDtime);
-		req.setClientName(oauthToken.getUserName());
-		req.setReq_client_num(clientName+tranDtime);
+
+		StringBuilder clientTime = new StringBuilder(clientDf.format(new Date()));
+		int len = clientId.length();
+		if (len < 12) {
+			while (len < 12) {
+				clientTime.append("0");
+				len++;
+			}
+		} else {
+			clientId = clientId.substring(12 - len);
+		}
+		String reqClientNum = clientId.toUpperCase(Locale.ROOT) + clientTime;
+		req.setReq_client_num(reqClientNum);
 		req.setTransfer_purpose("TR");
+		req.setReq_client_name(req.getClientName());
+
+		/*
+		최종수취고객 정보
+		 */
+		// req.setRecv_client_bank_code();
+		// req.setRecv_client_name();
+		// req.setRecv_client_account_num();
 
 		ResponseEntity<String> response = getStringResponse(accessToken, req);
-		System.out.println(response);
-//		new Gson().fromJson(response.getBody(), )
+		System.out.println("response.getStatusCode() = " + response.getStatusCode());
+		System.out.println("response.getBody() = " + response.getBody());
+		TransferWdFinNumRes transferWdFinNumRes = new Gson().fromJson(response.getBody(), TransferWdFinNumRes.class);
+		System.out.println("transferWdFinNumRes = " + transferWdFinNumRes);
+		return transferWdFinNumRes;
 	}
 
 	private ResponseEntity<String> getStringResponse(
-			String accessToken, TransferWithdrawFinNumReq req
+			String accessToken, TransferWdFinNumReq req
 	) {
 		RestTemplate rest = new RestTemplate();
 

@@ -41,25 +41,35 @@
         <h3>4. 이체 _ transfer</h3>
         <p class="lead">출금이체 - 핀테크 이용 번호 사용</p>
         <form class="container" action='transfer/withdraw/fin_num' method="post">
+            <h5>회원 정보</h5>
             <div class="mb-3">
-                <label class="form-label">회원 이름</label>
-                <input class="form-control" id="transfer_client_name" type="text" name="clientName"
+                <label class="form-label">회원 아이디</label>
+                <input class="form-control" id="transfer_client_id" type="text" name="clientId"
                        value="testUser"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">회원 성함</label>
+                <input class="form-control" id="transfer_client_name" type="text" name="clientName"
+                       value="최운식"/>
             </div>
             <div class="mb-3">
                 <label class="form-label">회원 전화번호</label>
                 <input class="form-control" id="transfer_client_mobile" type="text" name="clientMobile"
                        value="01012341234"/>
             </div>
+
+            <h5>약정 정보 (사용자가 등록한 약정 출금 계좌 중 하나)</h5>
             <div class="mb-3">
-                <label class="form-label">입금 계좌</label>
+                <label class="form-label">약정 계좌 (입금받을 계좌)</label>
                 <input class="form-control" id="transfer_cntr_account_num" type="text" name="cntr_account_num"/>
             </div>
             <div class="mb-3">
                 <label class="form-label">입금 계좌 기재 사항</label>
                 <input class="form-control" id="transfer_dps_print_content" type="text" name="dps_print_content"
-                       value="아임인 목돈 입금"/>
+                       value="아임인목돈"/>
             </div>
+
+            <h5>출금 정보</h5>
             <div class="mb-3">
                 <label class="form-label">출금 계좌의 핀테크 번호</label>
                 <input class="form-control" id="transfer_fintech_use_num" type="text" name="fintech_use_num"/>
@@ -67,23 +77,38 @@
             <div class="mb-3">
                 <label class="form-label">출금 계좌 기재사항</label>
                 <input class="form-control" id="transfer_wd_print_content" type="text" name="wd_print_content"
-                       value="아임인 목돈 출금"/>
+                       value="아임인목돈"/>
             </div>
             <div class="mb-3">
                 <label class="form-label">출금액</label>
                 <input class="form-control" id="transfer_tran_amt" type="text" name="tran_amt"/>
             </div>
-            <!--            <div class="mb-3">-->
-            <!--                <label class="form-label">요청 고객 계좌 개설기관 표준 코드</label>-->
-            <!--                <input class="form-control" id="transfer_req_client_bank_code" type="text" name=""/>-->
-            <!--            </div>-->
-            <!--            <div class="mb-3">-->
-            <!--                <label class="form-label">요청 고객 계좌 번호</label>-->
-            <!--                <input class="form-control" id="transfer_req_client_account_num" type="text" name=""/>-->
-            <!--            </div>-->
+
+            <h5>요청 고객 정보 (자금세탁방지 정보 수집 용도, 검증 X)</h5>
             <div class="mb-3">
-                <label class="form-label">요청 고객 핀테크 이용 번호</label>
-                <input class="form-control" id="transfer_req_client_fintech_use_num" type="text" name="req_client_fintech_use_num"/>
+                <label class="form-label">요청 고객 계좌 개설기관 표준 코드</label>
+                <input class="form-control" id="transfer_req_client_bank_code" type="text" name="req_client_bank_code"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">요청 고객 계좌 번호</label>
+                <input class="form-control" id="transfer_req_client_account_num" type="text" name="req_client_account_num"/>
+            </div>
+<!--            <div class="mb-3">-->
+<!--                <label class="form-label">요청 고객 핀테크 이용 번호</label>-->
+<!--                <input class="form-control" id="transfer_req_client_fintech_use_num" type="text" name="req_client_fintech_use_num"/>-->
+<!--            </div>-->
+            <h5>최종 수취인 정보 (금융 사고 발생 시 지급정지 등 신속한 대응을 위한 정보, 검증 X)</h5>
+            <div class="mb-3">
+                <label class="form-label">최종 수취 고객 성명</label>
+                <input class="form-control" id="transfer_recv_client_name" type="text" name="recv_client_name"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">최종 수취 고객 은행 코드</label>
+                <input class="form-control" id="transfer_recv_client_bank_code" type="text" name="recv_client_bank_code"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">최종 수취 고객 계좌번호</label>
+                <input class="form-control" id="transfer_recv_client_account_num" type="text" name="recv_client_account_num"/>
             </div>
             <input type='submit' value='출금 이체'>
         </form>

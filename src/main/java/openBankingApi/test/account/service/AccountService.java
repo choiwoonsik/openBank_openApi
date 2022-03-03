@@ -43,7 +43,9 @@ public class AccountService {
 				.orElseThrow(() -> new BusinessException(ExMessage.NOT_FOUND_ERROR));
 
 		String accessToken = oauthToken.getAccessToken();
-		String randNum = String.valueOf(new Random(System.currentTimeMillis()).nextInt(1000000000));
+		String randNum = String.valueOf(
+				new Random(System.currentTimeMillis()).nextInt(1000000000 - 100000001) + 100000000
+		);
 		String bankTranId = agencyCode + "U" + randNum;
 		DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA);
 		String tranDtime = df.format(new Date());
