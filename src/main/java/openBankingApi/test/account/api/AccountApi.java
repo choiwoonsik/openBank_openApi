@@ -2,6 +2,7 @@ package openBankingApi.test.account.api;
 
 import lombok.RequiredArgsConstructor;
 import openBankingApi.test.account.dto.AccountBalanceDto;
+import openBankingApi.test.account.dto.AccountInfoListDto;
 import openBankingApi.test.account.service.AccountService;
 import openBankingApi.test.basic.exception.BusinessException;
 import openBankingApi.test.basic.response.ResponseService;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RequestMapping("/account")
 @RestController
@@ -34,11 +37,18 @@ public class AccountApi {
 	}
 
 	@GetMapping("/list")
-	public void getAccountList(
+	public SingleResult<AccountInfoListDto> getAccountList(
 			@RequestParam String userId,
 			@RequestParam String includeCancelYn,
 			@RequestParam String sortOrder
 	) {
-
+		try {
+			return responseService.getSingleResult(
+					accountService.getAccountList(userId, includeCancelYn, sortOrder)
+			);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BusinessException(e.getMessage());
+		}
 	}
 }

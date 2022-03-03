@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import openBankingApi.test.account.dto.AccountBalanceDto;
+import openBankingApi.test.account.dto.AccountInfoListDto;
 import openBankingApi.test.basic.exception.BusinessException;
 import openBankingApi.test.basic.exception.ExMessage;
 import openBankingApi.test.oauth.entity.OauthToken;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -36,6 +38,7 @@ public class AccountService {
 	@Value("${open_api.agency_code}")
 	private String agencyCode;
 
+	@Transactional(readOnly = true)
 	public AccountBalanceDto getAccountBalance(
 			String userId, String fintechUseNum
 	) {
@@ -80,4 +83,37 @@ public class AccountService {
 		);
 	}
 
+	@Transactional(readOnly = true)
+	public AccountInfoListDto getAccountList(String userId, String includeCancelYn, String sortOrder) {
+		OauthToken oauthToken = tokenRepository.findByUserId(userId)
+				.orElseThrow(() -> new BusinessException(ExMessage.NOT_FOUND_ERROR));
+
+		ResponseEntity<String> response = getStringResponseEntity(includeCancelYn, sortOrder, oauthToken);
+
+		return new Gson().fromJson(response.getBody(), AccountInfoListDto.class);
+	}
+
+	private ResponseEntity<String> getStringResponseEntity(String includeCancelYn, String sortOrder, OauthToken oauthToken) {
+		RestTemplate rest = new RestTemplate();
+
+		String url = "https://testapi.openbanking.or.kr/v2.0/account/list" +
+				"?user_seq_no={user_seq_no}" +
+				"&include_cancel={include_cancel}" +
+				"&sort_order={sort_order}";
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBearerAuth(oauthToken.getAccessToken());
+
+		HttpEntity entity = new HttpEntity(headers);
+
+		return rest.exchange(
+				url,
+				HttpMethod.GET,
+				entity,
+				String.class,
+				oauthToken.getUserSeqNo(),
+				includeCancelYn,
+				sortOrder
+		);
+	}
 }
