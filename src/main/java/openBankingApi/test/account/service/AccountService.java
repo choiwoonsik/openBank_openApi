@@ -37,9 +37,9 @@ public class AccountService {
 	private String agencyCode;
 
 	public AccountBalanceDto getAccountBalance(
-			String userName, String usreMobile, String fintechUseNum
+			String userId, String fintechUseNum
 	) {
-		OauthToken oauthToken = tokenRepository.findByUserNameAndUserMobile(userName, usreMobile)
+		OauthToken oauthToken = tokenRepository.findByUserId(userId)
 				.orElseThrow(() -> new BusinessException(ExMessage.NOT_FOUND_ERROR));
 
 		String accessToken = oauthToken.getAccessToken();

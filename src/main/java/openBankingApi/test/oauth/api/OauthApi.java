@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+@RequestMapping("/oauth")
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -24,17 +25,18 @@ public class OauthApi {
 	@Value("${open_api.state}")
 	String state;
 
-	@GetMapping("/oauth/authorizeCode")
+	@GetMapping("/authorizeCode")
 	public String requestAuthorizeCode(
-			@RequestParam String clientName,
-			@RequestParam String clientMobile
+			@RequestParam String userId,
+			@RequestParam String userName,
+			@RequestParam String userMobile
 	) {
 		String url = "https://testapi.openbanking.or.kr/oauth/2.0/authorize" +
 				"?response_type=code" +
 				"&client_id=901765e4-1f64-448b-9961-ca7e2c1bb9b3" +
 				"&redirect_uri=http://localhost:9090/oauth/callback.html" +
 				"&scope=login inquiry transfer" +
-				"&client_info=" + clientName+ "M" + clientMobile +
+				"&client_info=" + userId + "-" + userName + "-" + userMobile +
 				"&state=" + state +
 				"&auth_type=0" +
 				"&lang=kor" +
@@ -45,7 +47,7 @@ public class OauthApi {
 	}
 
 	@ResponseBody
-	@GetMapping("/oauth/callback.html")
+	@GetMapping("/callback.html")
 	public SingleResult<OauthToken> requestToken(
 			@RequestParam(name = "code") String code,
 			@RequestParam(name = "scope") String scope,

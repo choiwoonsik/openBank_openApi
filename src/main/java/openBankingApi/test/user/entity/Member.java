@@ -18,6 +18,9 @@ public class Member {
 	private Long seq;
 
 	@Column
+	private String userId;
+
+	@Column
 	private String userName;
 
 	@Column

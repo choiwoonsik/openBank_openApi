@@ -6,9 +6,8 @@ import lombok.Data;
 @Data
 @Builder
 public class TransferWdFinNumReq {
-	String clientId;
-	String clientName;
-	String clientMobile;
+	String userId;
+	String userName;
 	String bank_tran_id;			//F123456789U4BC34239Z
 	String cntr_account_type;		//N (계좌)
 	String cntr_account_num;		//00012345678901234

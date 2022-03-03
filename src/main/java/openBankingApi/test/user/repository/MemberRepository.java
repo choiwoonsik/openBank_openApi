@@ -11,4 +11,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	Boolean existsByUserSeqNo(Long userSeqNo);
 
 	Optional<Member> findByUserSeqNo(Long userSeqNo);
+
+	Optional<Member> findByUserId(String userId);
 }

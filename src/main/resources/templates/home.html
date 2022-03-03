@@ -12,30 +12,34 @@
         <h3>1. 인증 _ oauth</h3>
         <p class="lead">사용자 인가 코드 & 토큰 발급 진행</p>
         <form action='/oauth/authorizeCode'>
-            회원 이름 : <input id='authorize_client_name' type='text' name="clientName" value="testUser"/><br>
-            회원 전화번호 : <input id='authorize_client_mobile' type='tel' maxlength='11' name="clientMobile"
+            회원 아이디 : <input id='authorize_client_id' type='text' name="userId" value="testUserId"/><br>
+            회원 이름 : <input id='authorize_user_name' type='text' name="userName" value="최운식"/><br>
+            회원 전화번호 : <input id='authorize_client_mobile' type='tel' maxlength='11' name="userMobile"
                              value="01012341234"/><br>
             <input type='submit' value='가입'>
         </form>
-        <!--        <a class="btn btn-lg btn-secondary" href="/oauth/authorizeCode">사용자 인가 코드 발급 (성공 시 이어서 사용자 토큰 발급 진행)</a><br>-->
+
         <h3>2. 사용자 _ user</h3>
         <p class="lead">사용자 정보 조회</p>
         <form action='/user/me'>
-            회원 이름 : <input id="user_client_name" type="text" name="clientName" value="testUser"/><br>
-            회원 전화번호 : <input id='user_client_mobile' type='tel' maxlength='11' name="clientMobile"
-                             value="01012341234"/><br>
+            회원 아이디 : <input id='user_user_id' type='text' name="userId" value="testUserId"/><br>
             <input type='submit' value='사용자 정보 조회'>
         </form>
-        <!--        <a class="btn btn-lg btn-secondary" href="/user/me">사용자 정보 & 계좌 정보 조회</a>-->
+
         <h3>3. 조회 _ account</h3>
         <p class="lead">잔액 조회</p>
         <form action='/account/balance/fin_num'>
-            회원 이름 : <input id="account_client_name" type="text" name="clientName"
-                            value="testUser"/><br>
-            회원 전화번호 : <input id='account_client_mobile' type='tel' maxlength='11' name="clientMobile"
-                             value="01012341234"/><br>
+            회원 아이디 : <input id='account_user_id' type='text' name="userId" value="testUserId"/><br>
             계좌 핀테크 이용 번호 : <input id="account_fintech_use_num" type="text" name="fintechUseNum"/><br>
             <input type='submit' value='잔액 조회'>
+        </form>
+
+        <p class="lead">계좌 조회</p>
+        <form action="/account/list">
+            회원 아이디 : <input id="account_user_id2" type="text" name="userId" value="testUserId"><br>
+            해지계좌 포함 여부 : <input id="account_include_cancel_yn" type="text" name="includeCancelYn" value="N"><br>
+            정렬 순서 (동의일 기준) : <input id="account_sort_order" type="text" name="sortOrder" value="A"><br>
+            <input type="submit" value="전 계좌 조회">
         </form>
 
         <h3>4. 이체 _ transfer</h3>
@@ -44,18 +48,13 @@
             <h5>회원 정보</h5>
             <div class="mb-3">
                 <label class="form-label">회원 아이디</label>
-                <input class="form-control" id="transfer_client_id" type="text" name="clientId"
-                       value="testUser"/>
+                <input class="form-control" id="transfer_user_id" type="text" name="userId"
+                       value="testUserId"/>
             </div>
             <div class="mb-3">
                 <label class="form-label">회원 성함</label>
-                <input class="form-control" id="transfer_client_name" type="text" name="clientName"
+                <input class="form-control" id="transfer_user_name" type="text" name="userName"
                        value="최운식"/>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">회원 전화번호</label>
-                <input class="form-control" id="transfer_client_mobile" type="text" name="clientMobile"
-                       value="01012341234"/>
             </div>
 
             <h5>약정 정보 (사용자가 등록한 약정 출금 계좌 중 하나)</h5>

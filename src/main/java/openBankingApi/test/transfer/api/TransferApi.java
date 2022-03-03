@@ -10,6 +10,7 @@ import openBankingApi.test.transfer.dto.TransferWdFinNumRes;
 import openBankingApi.test.transfer.service.TransferService;
 import org.springframework.web.bind.annotation.*;
 
+@RequestMapping("/transfer")
 @RestController
 @RequiredArgsConstructor
 public class TransferApi {
@@ -17,13 +18,14 @@ public class TransferApi {
 	private final TransferService transferService;
 	private final ResponseService responseService;
 
-	@PostMapping("transfer/withdraw/fin_num")
+	@PostMapping("/withdraw/fin_num")
 	public SingleResult<TransferWdFinNumRes> transferWithdrawByFinNum(
 			@RequestBody @ModelAttribute TransferWdFinNumReq req
 	) {
 		try {
 			return responseService.getSingleResult(transferService.transferWithdrawByFinNum(req));
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new BusinessException(ExMessage.UNDEFINED_ERROR);
 		}
 	}

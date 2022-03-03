@@ -7,9 +7,11 @@ import openBankingApi.test.basic.exception.BusinessException;
 import openBankingApi.test.basic.response.ResponseService;
 import openBankingApi.test.basic.response.SingleResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequestMapping("/account")
 @RestController
 @RequiredArgsConstructor
 public class AccountApi {
@@ -17,18 +19,26 @@ public class AccountApi {
 	private final AccountService accountService;
 	private final ResponseService responseService;
 
-	@GetMapping("/account/balance/fin_num")
+	@GetMapping("/balance/fin_num")
 	public SingleResult<AccountBalanceDto> getAccountBalanceByFinNum(
-			@RequestParam(name = "clientName") String clientName,
-			@RequestParam(name = "clientMobile") String clientMobile,
+			@RequestParam(name = "userId") String userId,
 			@RequestParam(name = "fintechUseNum") String fintechUseNum
 	) {
 		try {
-			AccountBalanceDto accountBalance = accountService.getAccountBalance(clientName, clientMobile, fintechUseNum);
+			AccountBalanceDto accountBalance = accountService.getAccountBalance(userId, fintechUseNum);
 			return responseService.getSingleResult(accountBalance);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BusinessException(e.getMessage());
 		}
+	}
+
+	@GetMapping("/list")
+	public void getAccountList(
+			@RequestParam String userId,
+			@RequestParam String includeCancelYn,
+			@RequestParam String sortOrder
+	) {
+
 	}
 }

@@ -27,10 +27,9 @@ public class TransferService {
 	private String agencyCode;
 
 	public TransferWdFinNumRes transferWithdrawByFinNum(TransferWdFinNumReq req) {
-		String clientId = req.getClientId();
-		String clientMobile = req.getClientMobile();
+		String userId = req.getUserId();
 
-		OauthToken oauthToken = tokenRepository.findByUserNameAndUserMobile(clientId, clientMobile)
+		OauthToken oauthToken = tokenRepository.findByUserId(userId)
 				.orElseThrow(() -> new BusinessException(ExMessage.NOT_FOUND_ERROR));
 
 		String accessToken = oauthToken.getAccessToken();
@@ -38,27 +37,27 @@ public class TransferService {
 		String bankTranId = agencyCode + "U" + randNum;
 
 		DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA);
-		DateFormat clientDf = new SimpleDateFormat("ddHHmmss", Locale.KOREA);
+		DateFormat userDf = new SimpleDateFormat("ddHHmmss", Locale.KOREA);
 		String tranDtime = df.format(new Date());
 
 		req.setBank_tran_id(bankTranId);
 		req.setCntr_account_type("N");
 		req.setTran_dtime(tranDtime);
 
-		StringBuilder clientTime = new StringBuilder(clientDf.format(new Date()));
-		int len = clientId.length();
+		StringBuilder clientTime = new StringBuilder(userDf.format(new Date()));
+		int len = userId.length();
 		if (len < 12) {
 			while (len < 12) {
 				clientTime.append("0");
 				len++;
 			}
 		} else {
-			clientId = clientId.substring(12 - len);
+			userId = userId.substring(12 - len);
 		}
-		String reqClientNum = clientId.toUpperCase(Locale.ROOT) + clientTime;
+		String reqClientNum = userId.toUpperCase(Locale.ROOT) + clientTime;
 		req.setReq_client_num(reqClientNum);
 		req.setTransfer_purpose("TR");
-		req.setReq_client_name(req.getClientName());
+		req.setReq_client_name(req.getUserName());
 
 		/*
 		최종수취고객 정보
@@ -68,11 +67,7 @@ public class TransferService {
 		// req.setRecv_client_account_num();
 
 		ResponseEntity<String> response = getStringResponse(accessToken, req);
-		System.out.println("response.getStatusCode() = " + response.getStatusCode());
-		System.out.println("response.getBody() = " + response.getBody());
-		TransferWdFinNumRes transferWdFinNumRes = new Gson().fromJson(response.getBody(), TransferWdFinNumRes.class);
-		System.out.println("transferWdFinNumRes = " + transferWdFinNumRes);
-		return transferWdFinNumRes;
+		return new Gson().fromJson(response.getBody(), TransferWdFinNumRes.class);
 	}
 
 	private ResponseEntity<String> getStringResponse(

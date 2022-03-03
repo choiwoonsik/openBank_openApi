@@ -18,6 +18,9 @@ public class OauthToken {
 	private Long seq;
 
 	@Column(unique = true, nullable = false)
+	private String userId;
+
+	@Column(nullable = false)
 	private String userName;
 
 	@Column(unique = true, nullable = false)

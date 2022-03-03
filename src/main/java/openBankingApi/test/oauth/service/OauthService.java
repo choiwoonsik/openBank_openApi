@@ -57,9 +57,10 @@ public class OauthService {
 	public OauthToken saveAuthorizeToken(
 			String code, String scope, String client_info, String state
 	) {
-		int index = client_info.lastIndexOf("M");
-		String clientName = client_info.substring(0, index);
-		String clientMobile = client_info.substring(index + 1);
+		String[] userInfos = client_info.split("-");
+		String userId = userInfos[0];
+		String userName = userInfos[1];
+		String userMobile = userInfos[2];
 
 		if (!state.equals(openApiState)) {
 			throw new BusinessException("사전 정보 오류");
@@ -86,12 +87,14 @@ public class OauthService {
 				&& response.getBody().getAccess_token() != null)
 		{
 			OauthToken oauthToken = response.getBody().toEntity();
-			oauthToken.setUserName(clientName);
-			oauthToken.setUserMobile(clientMobile);
+			oauthToken.setUserId(userId);
+			oauthToken.setUserName(userName);
+			oauthToken.setUserMobile(userMobile);
 			oauthToken.setRegDate(LocalDateTime.now());
 
 			if (!memberRepository.findByUserSeqNo(oauthToken.getUserSeqNo()).isPresent()) {
 				memberService.saveUser(MemberDto.builder()
+						.userId(userId)
 						.userSeqNo(oauthToken.getUserSeqNo())
 						.userName(oauthToken.getUserName())
 						.userMobile(oauthToken.getUserMobile())
