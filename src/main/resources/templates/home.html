@@ -1,8 +1,7 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/header :: header">
-    <title>OPEN BANK API</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<html>
+<head>
+    <meta charset="utf-8">
 </head>
 <body>
 <div class="container">
@@ -10,7 +9,7 @@
         <h1>오픈뱅킹 API</h1>
         <a class="btn btn-lg btn-secondary" href="/">홈</a>
         <h3>1. 인증 _ oauth</h3>
-        <p class="lead">사용자 인가 코드 & 토큰 발급 진행</p>
+        <p class="lead">1-1. 사용자 인가 코드 & 토큰 발급 진행</p>
         <form action='/oauth/authorizeCode'>
             회원 아이디 : <input id='authorize_client_id' type='text' name="userId" value="testUserId"/><br>
             회원 이름 : <input id='authorize_user_name' type='text' name="userName" value="최운식"/><br>
@@ -20,30 +19,46 @@
         </form>
 
         <h3>2. 사용자 _ user</h3>
-        <p class="lead">사용자 정보 조회</p>
+        <p class="lead">2-1. 사용자 정보 조회</p>
         <form action='/user/me'>
             회원 아이디 : <input id='user_user_id' type='text' name="userId" value="testUserId"/><br>
             <input type='submit' value='사용자 정보 조회'>
         </form>
 
         <h3>3. 조회 _ account</h3>
-        <p class="lead">잔액 조회</p>
+        <p class="lead">3-1. 잔액 조회</p>
         <form action='/account/balance/fin_num'>
             회원 아이디 : <input id='account_user_id' type='text' name="userId" value="testUserId"/><br>
             계좌 핀테크 이용 번호 : <input id="account_fintech_use_num" type="text" name="fintechUseNum"/><br>
             <input type='submit' value='잔액 조회'>
         </form>
 
-        <p class="lead">계좌 조회</p>
+        <br>
+        <p class="lead">3-2. 계좌 조회</p>
         <form action="/account/list">
-            회원 아이디 : <input id="account_user_id2" type="text" name="userId" value="testUserId"><br>
-            해지계좌 포함 여부 : <input id="account_include_cancel_yn" type="text" name="includeCancelYn" value="N"><br>
-            정렬 순서 (동의일 기준) : <input id="account_sort_order" type="text" name="sortOrder" value="A"><br>
+            회원 아이디 : <input id="account_list_user_id" type="text" name="userId" value="testUserId"><br>
+            해지계좌 포함 여부 : <input id="account_list_include_cancel_yn" type="text" name="includeCancelYn" value="N"><br>
+            정렬 순서 (동의일 기준) : <input id="account_list_sort_order" type="text" name="sortOrder" value="A"><br>
             <input type="submit" value="전 계좌 조회">
         </form>
 
+        <br>
+        <p class="lead">3-3. 거래내역 조회 by Fin Num</p>
+        <form action="/account/transaction_list/fin_num">
+            회원 아이디 : <input id="account_transaction_list_user_id" type="text" name="userId" value="testUserId"><br>
+            핀테크 이용 번호 : <input id="account_transaction_list_fintech_use_num" type="text" name="fintech_use_num"><br>
+            조회구분 코드 (A_전체, I_입금, O_출금) : <input id="account_transaction_list_inquiry_type" type="text" name="inquiry_type" value="A"><br>
+            조회 기준 코드 (D_날짜 / T_시간) : <input id="account_transaction_list_inquiry_base" type="text" name="inquiry_base" value="D"><br>
+            조회시작일자(20001201) : <input id="account_transaction_list_from_date" type="date" name="from_date" ><br>
+            조회시작시간(100000) : <input id="account_transaction_list_from_time" type="time" name="from_time"><br>
+            조회종료일자 : <input id="account_transaction_list_to_date" type="date" name="to_date"><br>
+            조회종료시간 : <input id="account_transaction_list_to_time" type="time" name="to_time"><br>
+            정렬순서 (A / D) : <input id="account_transaction_list_sort_order" type="text" name="sort_order"><br>
+            <input type="submit" value="거래내역 조회">
+        </form>
+
         <h3>4. 이체 _ transfer</h3>
-        <p class="lead">출금이체 - 핀테크 이용 번호 사용</p>
+        <p class="lead">4-1. 출금이체 - 핀테크 이용 번호 사용</p>
         <form class="container" action='transfer/withdraw/fin_num' method="post">
             <h5>회원 정보</h5>
             <div class="mb-3">

@@ -3,16 +3,14 @@ package openBankingApi.test.account.api;
 import lombok.RequiredArgsConstructor;
 import openBankingApi.test.account.dto.AccountBalanceDto;
 import openBankingApi.test.account.dto.AccountInfoListDto;
+import openBankingApi.test.account.dto.TransactionListReq;
+import openBankingApi.test.account.dto.TransactionListRes;
 import openBankingApi.test.account.service.AccountService;
 import openBankingApi.test.basic.exception.BusinessException;
+import openBankingApi.test.basic.exception.ExMessage;
 import openBankingApi.test.basic.response.ResponseService;
 import openBankingApi.test.basic.response.SingleResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/account")
 @RestController
@@ -49,6 +47,20 @@ public class AccountApi {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BusinessException(e.getMessage());
+		}
+	}
+
+	@GetMapping("/transaction_list/fin_num")
+	public SingleResult<TransactionListRes> getTransactionListByFinNum(
+			@ModelAttribute TransactionListReq transactionListReq
+	) {
+		try {
+			return responseService.getSingleResult(
+					accountService.getTransactionListByFinNum(transactionListReq)
+			);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new BusinessException(ExMessage.UNDEFINED_ERROR);
 		}
 	}
 }
